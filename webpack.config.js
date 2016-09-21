@@ -25,36 +25,13 @@ module.exports = {
         		loaders: ['react-hot','babel']
 			},
 			{
-		        test: /\.css$/,
-		        loader: 'style-loader!css-loader!autoprefixer-loader?browsers=last 2 versions'
-		    },
-		    {
-		        test: /\.sass/,
-		        loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded&indentedSyntax'
-		    },
-		    {
-		        test: /\.scss/,
-		        loader: 'style-loader!css-loader!autoprefixer-loader?browsers=last 2 versions!sass-loader?outputStyle=expanded'
-		    },
-				{
-		        test: /\.(png|jpg|gif|woff|woff2|eot|ttf|svg)$/,
-		        loader: 'url-loader?limit=8192'
-	      }
+	        test: /\.(png|jpg|gif|woff|woff2|eot|ttf|svg)$/,
+	        loader: 'url-loader?limit=8192'
+      }
 		]
 	},
 	plugins:[
 		new webpack.HotModuleReplacementPlugin(),
-		new webpack.NoErrorsPlugin(),
-		new webpack.ProvidePlugin({
-	      $: "jquery",
-	      jQuery: "jquery"
-	    })
-	],
-	// devServer: {
-	// 	host: 'localhost',
-  //   	port: 8080,
-	//     proxy: {
-	//       '/api/*' : 'http://localhost:3000',
-	//     }
-  // 	}
+		new webpack.NoErrorsPlugin()
+	]
 }

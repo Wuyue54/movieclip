@@ -8,3 +8,5 @@ We want you to give us a webpage and when we open it, we see a movie clip compon
 
 To run this, first **npm install**
 then **npm run dev** and visit <http://localhost:8080/> to view it.
+
+May be you need to do **npm install -g nodemon** this first
