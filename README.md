@@ -5,3 +5,6 @@ Write a component, according to the specifications in this url, <https://docs.go
 You can take a look at the code here <https://github.com/mixslice/generator-react-mix>
 
 We want you to give us a webpage and when we open it, we see a movie clip component
+
+To run this, first **npm install**
+then **npm run dev** and visit <http://localhost:8080/> to view it.
