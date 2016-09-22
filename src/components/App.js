@@ -8,7 +8,7 @@ class App extends React.Component{
 		let preArray = ['src/imgs/1.jpg','src/imgs/2.jpeg','src/imgs/3.jpeg','src/imgs/4.jpg'];
 		let ratio = 1;
 		let width = 120;
-		let length = 320;
+		let length = 420;
 
 		return(
 			<div >
