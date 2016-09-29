@@ -4,12 +4,9 @@ import Preview from './Preview';
 class Clip extends React.Component{
   constructor(props){
     super(props);
-    this.downR = this.downR.bind(this);
-    this.downL = this.downL.bind(this);
-    this.dragR = this.dragR.bind(this);
-    this.dragL = this.dragL.bind(this);
-    this.upR = this.upR.bind(this);
-    this.upL = this.upL.bind(this);
+    this.drag = this.drag.bind(this);
+    // this.drop = this.drop.bind(this);
+    this.onDragOver = this.onDragOver.bind(this);
     this.state = {
        preArray : ['src/imgs/1.jpg','src/imgs/2.jpeg','src/imgs/3.jpeg','src/imgs/4.jpg'],
        ratio : 1,
@@ -21,79 +18,48 @@ class Clip extends React.Component{
     }
   }
 
-  downR(e){
+  drag(e){
     e.stopPropagation();
-    this.setState({
-      upR : 1,
-      initX : e.pageX
-    })
-  }
+    e.preventDefault();
+    let dis;
+    let newWidth;
+    if(e.target.className === 'rightBar'){
+      if(e.clientX <= this.refs.ClipWrapper.offsetLeft+50){
+        return ;
+      }
 
-  downL(e){
-    e.stopPropagation();
-    this.setState({
-      upL : 1,
-      initX : e.pageX
-    })
-  }
+      dis = e.clientX - e.target.offsetLeft;
+      newWidth =  this.state.length + dis;
 
-  upR(e){
-    e.stopPropagation();
-    console.log('upR');
-    this.setState({
-      upR : 0
-    })
-  }
-
-  upL(e){
-    console.log('upL');
-    e.stopPropagation();
-    this.setState({
-      upL : 0
-    })
-  }
-
-  dragR(e){
-    e.stopPropagation();
-    console.log('dragR...');
-    let tempDis = 0;
-    let currX = e.pageX;
-    let tempWidth;
-    console.log(this.state.upR);
-    if(this.state.upR == 0){
-      return;
-    }else{
-      tempDis = e.pageX - this.state.initX;
-      tempWidth = this.state.length - tempDis;
-      console.log()
       this.setState({
-        length: tempWidth
+        length: newWidth
       });
     }
-    console.log(this.state.length);
-  }
+    if(e.target.className === 'leftBar'){
 
-  dragL(e){
-    e.stopPropagation();
-    console.log('dragLLLL...');
-    let tempDis = 0;
-    let currX = e.pageX;
-    let tempWidth ;
-    let marginL ;
-    if(this.state.upL == 0){
-      return;
-    }else{
-      tempDis = e.pageX - this.state.initX;
-      tempWidth = this.state.length - tempDis;
+      if(e.clientX >= this.refs.ClipWrapper.offsetLeft + this.state.length -50){
+        return ;
+      }
+      dis = e.clientX - e.target.offsetLeft;
+      newWidth =  this.state.length - dis;
+      let marginLeft = Number(this.refs.ClipWrapper.style.marginLeft.replace(/px/g, ' '))+ dis;
+      this.refs.ClipWrapper.style.marginLeft = marginLeft + 'px';
       this.setState({
-        length: tempWidth
-      })
-      this.refs.ClipWrapper.marginLeft = tempDis;
+        length: newWidth
+      });
     }
   }
+  onDragOver(e) {
+     e.preventDefault();
+     e.stopPropagation();
+     return false;
+  }
+
+  // drop(e){
+  //    console.log(this.state);
+  // }
 
   render(){
-
     let styleObj = {
       wrapper:{
           backgroundColor: '#393939',
@@ -101,24 +67,37 @@ class Clip extends React.Component{
           height: this.state.width +'px',
       },
       bar:{
-          backgroundColor: '#fea129',
+          // backgroundColor: '#fea129',
           display: 'inline-block',
           width: '10px',
           height: this.state.width +'px',
-          clear: 'both'
+          clear: 'both',
+          cursor: 'ew-resize'
       }
     }
 
     return(
       <div style = {styleObj.wrapper} ref = 'ClipWrapper' >
-        <div  onMouseDown = {this.downL} onMouseOver = {this.dragL} onMouseUp = {this.upL} style ={styleObj.bar} ref = 'leftBar'></div>
+        <div
+             draggable='true'
+             onDrag = {this.drag}
+             onDragOver = {this.onDragOver}
+             style ={styleObj.bar}
+             className = 'leftBar'>
+        </div>
         <Preview
 							width = {this.state.width}
 							length = {this.state.length}
 							ratio = {this.state.ratio}
 							preview = {this.state.preArray}
 				/>
-      <div onMouseDown = {this.downR} onMouseOver = {this.dragR} onMouseUp = {this.upR} style ={styleObj.bar} ref ='rightBar'></div>
+      <div
+           draggable='true'
+           onDrag={this.drag}
+           onDragOver = {this.onDragOver}
+           style ={styleObj.bar}
+           className = 'rightBar'>
+      </div>
       </div>
     );
   }
